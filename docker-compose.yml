@@ -8,10 +8,10 @@ services:
     container_name: homestay_mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_ROOT_PASSWORD: ${PASSWORD ROOT}
       MYSQL_DATABASE: homestay_db
       MYSQL_USER: homestay_user
-      MYSQL_PASSWORD: homestay_password1234567
+      MYSQL_PASSWORD: ${PASSWORD USER}
     ports:
       - "3306:3306"
     volumes:
