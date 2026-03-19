@@ -9,7 +9,7 @@ export const sendSuccess = (
   return res.status(statusCode).json({
     success: true,
     message,
-    data,
+    data: JSON.parse(JSON.stringify(data)),
   });
 };
 

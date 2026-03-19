@@ -6,6 +6,7 @@ import 'dotenv/config'
 import cookieParser from 'cookie-parser';
 import { errorMiddleware } from './middlewares/error.middleware';
 import authRouter from './routes/auth.routes'
+import roomRouter from './routes/room.routes'
 // import { env } from './config/env';
 
 const app = express();
@@ -27,6 +28,7 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/rooms', roomRouter);
 app.use(errorMiddleware);
 // Routes (sẽ thêm dần ở Phase 3)
 // app.use('/api/auth', authRoutes);
