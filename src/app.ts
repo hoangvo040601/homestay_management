@@ -8,6 +8,7 @@ import { errorMiddleware } from './middlewares/error.middleware';
 import authRouter from './routes/auth.routes'
 import roomRouter from './routes/room.routes'
 import guestRouter from './routes/guest.routes'
+import bookingRouter from './routes/bookings.routes'
 // import { env } from './config/env';
 
 const app = express();
@@ -31,6 +32,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRouter);
 app.use('/api/rooms', roomRouter);
 app.use('/api/guests', guestRouter);
+app.use('/api/bookings',bookingRouter);
 app.use(errorMiddleware);
 // Routes (sẽ thêm dần ở Phase 3)
 // app.use('/api/auth', authRoutes);
