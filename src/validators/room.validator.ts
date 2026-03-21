@@ -45,4 +45,6 @@ export const availableRoomsSchema = z.object({
 export type CreateRoomTypeDto = z.infer<typeof createRoomTypeSchema>['body'];
 export type CreateRoomDto = z.infer<typeof createRoomSchema>['body'];
 export type UpdateRoomDto = z.infer<typeof updateRoomSchema>['body'];
-export type UpdateRoomStatusDto = z.infer<typeof updateRoomStatusSchema>['body'];
+export type UpdateRoomStatusDto = z.infer<
+  typeof updateRoomStatusSchema
+>['body'];

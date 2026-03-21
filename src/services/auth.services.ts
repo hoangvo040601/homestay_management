@@ -1,30 +1,38 @@
-import bcrypt from 'bcryptjs'
-import prisma from '../config/db'
-import { getRefreshTokenExpiry, LoginDto, RegisterDto } from '../validators/auth.validator'
-import {generateAccessToken,generateRefreshToken, verifyRefreshToken} from '../utils/jwt'
+import bcrypt from 'bcryptjs';
+import prisma from '../config/db';
+import {
+  getRefreshTokenExpiry,
+  LoginDto,
+  RegisterDto,
+} from '../validators/auth.validator';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from '../utils/jwt';
 
-const login = async(data: LoginDto)=>{
-    const user = await prisma.user.findUnique({
-        where: {email: data.email}
-    });
-    if(!user) throw new Error('Email hoặc mật khẩu không đúng!');
-    if(!user.isActive) throw new Error('Tài khoản đã bị vô hiệu hoá!');
-     
-    const isMatch = await bcrypt.compare(data.password, user.password);
-    if(!isMatch) throw new Error('Email hoặc mật khẩu không đúng!');
-    
-    const payload = {id: user.id, email: user.email, role: user.role};
-    const accessToken = generateAccessToken (payload);
-    const refreshToken = generateRefreshToken(payload);
+const login = async (data: LoginDto) => {
+  const user = await prisma.user.findUnique({
+    where: { email: data.email },
+  });
+  if (!user) throw new Error('Email hoặc mật khẩu không đúng!');
+  if (!user.isActive) throw new Error('Tài khoản đã bị vô hiệu hoá!');
 
-    await prisma.refreshToken.deleteMany({
+  const isMatch = await bcrypt.compare(data.password, user.password);
+  if (!isMatch) throw new Error('Email hoặc mật khẩu không đúng!');
+
+  const payload = { id: user.id, email: user.email, role: user.role };
+  const accessToken = generateAccessToken(payload);
+  const refreshToken = generateRefreshToken(payload);
+
+  await prisma.refreshToken.deleteMany({
     where: {
       userId: user.id,
-      expiresAt: { lt: new Date() },    // chỉ xoá token đã hết hạn
+      expiresAt: { lt: new Date() }, // chỉ xoá token đã hết hạn
     },
   });
 
-    await prisma.refreshToken.create({
+  await prisma.refreshToken.create({
     data: {
       token: refreshToken,
       userId: user.id,
@@ -32,27 +40,25 @@ const login = async(data: LoginDto)=>{
     },
   });
 
+  return {
+    accessToken,
+    refreshToken,
+    user: {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      phone: user.phone,
+    },
+  };
+};
 
-    return {
-        accessToken,
-        refreshToken,
-        user: {
-            id: user.id,
-            email: user.email,
-            role: user.role,
-            phone: user.phone,
-        },
-    }
-
-}
-
-const register = async (data: RegisterDto) =>{
-    const user = await prisma.user.findUnique({
-        where: {email: data.email}
-    });
-    if(user) throw new Error('Email đã tồn tại!');
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-    return prisma.user.create({
+const register = async (data: RegisterDto) => {
+  const user = await prisma.user.findUnique({
+    where: { email: data.email },
+  });
+  if (user) throw new Error('Email đã tồn tại!');
+  const hashedPassword = await bcrypt.hash(data.password, 10);
+  return prisma.user.create({
     data: {
       name: data.name,
       email: data.email,
@@ -69,8 +75,7 @@ const register = async (data: RegisterDto) =>{
       createdAt: true,
     },
   });
-
-}
+};
 
 const refreshService = async (refreshToken: string) => {
   // 1. Verify chữ ký JWT
@@ -128,13 +133,13 @@ const refreshService = async (refreshToken: string) => {
   return { accessToken: newAccessToken, refreshToken: newRefreshToken };
 };
 
-const logout = async(refreshtoken: string)=>{
-    await prisma.refreshToken.deleteMany({
-        where: {
-            token: refreshtoken
-        }
-    })
-}
+const logout = async (refreshtoken: string) => {
+  await prisma.refreshToken.deleteMany({
+    where: {
+      token: refreshtoken,
+    },
+  });
+};
 const getMeService = async (userId: number) => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -151,4 +156,4 @@ const getMeService = async (userId: number) => {
   return user;
 };
 
-export default {login, register, refreshService ,logout,getMeService }
+export default { login, register, refreshService, logout, getMeService };

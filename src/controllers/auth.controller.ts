@@ -1,33 +1,36 @@
-import { Response, Request } from "express";
-import authSevices from '../services/auth.services'
-import { clearRefreshTokenCookieOptions, refreshTokenCookieOptions } from "../config/cookie";
-import { sendError, sendSuccess } from "../utils/response";
+import { Response, Request } from 'express';
+import authSevices from '../services/auth.services';
+import {
+  clearRefreshTokenCookieOptions,
+  refreshTokenCookieOptions,
+} from '../config/cookie';
+import { sendError, sendSuccess } from '../utils/response';
 
-
-
-const login = async(req: Request, res: Response)=>{
-    try {
-        const result = await authSevices.login(req.body)
-        res.cookie('refreshToken', result.refreshToken, refreshTokenCookieOptions);
-        sendSuccess(res, {
-          accessToken: result.accessToken,
-          user: result.user,
-        }, 'Đăng nhập thành công');
-        
-    } catch (error: any) {
-        sendError(res, error.message, 401);
-    }
+const login = async (req: Request, res: Response) => {
+  try {
+    const result = await authSevices.login(req.body);
+    res.cookie('refreshToken', result.refreshToken, refreshTokenCookieOptions);
+    sendSuccess(
+      res,
+      {
+        accessToken: result.accessToken,
+        user: result.user,
+      },
+      'Đăng nhập thành công',
+    );
+  } catch (error: any) {
+    sendError(res, error.message, 401);
+  }
 };
 
-const register = async(req: Request, res: Response)=>{
-    try {
-        const user = await authSevices.register(req.body)
-        sendSuccess(res,user, 'Tạo tài khoản thành công!',201)
-        
-    } catch (error: any) {
-        sendError(res,error.message,400)
-    }   
-}
+const register = async (req: Request, res: Response) => {
+  try {
+    const user = await authSevices.register(req.body);
+    sendSuccess(res, user, 'Tạo tài khoản thành công!', 201);
+  } catch (error: any) {
+    sendError(res, error.message, 400);
+  }
+};
 
 const refresh = async (req: Request, res: Response) => {
   try {
@@ -37,7 +40,11 @@ const refresh = async (req: Request, res: Response) => {
     }
     const result = await authSevices.refreshService(refreshToken);
     res.cookie('refreshToken', result.refreshToken, refreshTokenCookieOptions);
-    sendSuccess(res, { accessToken: result.accessToken }, 'Làm mới token thành công');
+    sendSuccess(
+      res,
+      { accessToken: result.accessToken },
+      'Làm mới token thành công',
+    );
   } catch (error: any) {
     res.clearCookie('refreshToken', clearRefreshTokenCookieOptions);
     sendError(res, error.message, 401);
@@ -66,4 +73,4 @@ const getMe = async (req: Request, res: Response) => {
   }
 };
 
-export default {login, register, refresh, logout, getMe}
+export default { login, register, refresh, logout, getMe };
