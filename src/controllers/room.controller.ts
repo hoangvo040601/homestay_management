@@ -1,5 +1,5 @@
 import { Request ,Response} from 'express';
-import roomSevices from '../services/room.sevices'
+import roomSevices from '../services/room.services'
 import { sendError, sendSuccess } from '../utils/response';
 
 //Lấy tất cả loại phòng

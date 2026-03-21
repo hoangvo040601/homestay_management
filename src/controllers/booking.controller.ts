@@ -1,5 +1,5 @@
 import {Request, Response} from 'express'
-import bookingSevices from '../services/booking.sevices'
+import bookingSevices from '../services/booking.services'
 import { sendError, sendSuccess } from '../utils/response'
 import { getAuthUser, getParamId } from '../utils/request'
 
