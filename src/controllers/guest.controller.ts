@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import guestSevices from '../services/guest.sevices'
+import guestSevices from '../services/guest.services'
 import { sendError, sendSuccess } from '../utils/response';
 
 // Lấy dang sách khách hàng
