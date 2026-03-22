@@ -11,7 +11,7 @@ import guestRouter from './routes/guest.routes'
 import bookingRouter from './routes/bookings.routes'
 import serviceRoter from './routes/service.routes'
 import staffRouter from './routes/staff.routes'
-// import { env } from './config/env';
+import paymentRouter from './routes/payment.routes'
 
 const app = express();
 
@@ -37,6 +37,7 @@ app.use('/api/guests', guestRouter);
 app.use('/api/bookings',bookingRouter);
 app.use('/api/services', serviceRoter)
 app.use('/api/staff',staffRouter)
+app.use('/api/payments', paymentRouter)
 app.use(errorMiddleware);
 // Routes (sẽ thêm dần ở Phase 3)
 // app.use('/api/auth', authRoutes);
