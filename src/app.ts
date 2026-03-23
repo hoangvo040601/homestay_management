@@ -12,6 +12,7 @@ import bookingRouter from './routes/bookings.routes'
 import serviceRoter from './routes/service.routes'
 import staffRouter from './routes/staff.routes'
 import paymentRouter from './routes/payment.routes'
+import reportRouter from './routes/report.routes'
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use('/api/bookings',bookingRouter);
 app.use('/api/services', serviceRoter)
 app.use('/api/staff',staffRouter)
 app.use('/api/payments', paymentRouter)
+app.use('/api/reports',reportRouter)
 app.use(errorMiddleware);
 // Routes (sẽ thêm dần ở Phase 3)
 // app.use('/api/auth', authRoutes);
